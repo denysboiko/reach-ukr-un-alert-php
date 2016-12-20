@@ -1,0 +1,831 @@
+@import 'prefixer';
+
+@s_header: 50px;
+@s_aside: 360px;
+
+@c_header: #eee;
+
+@c_border: #eee;
+
+
+@f_main: Roboto, verdana, sans-serif;
+
+@fw_bold: 500;
+
+@s_font_scale: 1.2;
+@s_font: 14px;
+@s_font_small: @s_font / @s_font_scale;
+@s_font_h4: @s_font * @s_font_scale;
+@s_font_h3: @s_font_h4 * @s_font_scale;
+@s_font_h2: @s_font_h3 * @s_font_scale;
+@s_font_h1: @s_font_h2 * @s_font_scale;
+
+@s_line_height: 1.4;
+
+@c_text: #666;
+@c_text_monthpicker: #444;
+@c_monthpicker_picker: #6e3;
+
+@c_h4: #777;
+
+@c_button_bg: #f55;
+
+@c_shadow: rgba(30, 30, 30, .5);
+@c_shadow_noalpha: #666;
+
+@s_button_border_radius: 4px;
+@s_button_border_radius_big: 6px;
+
+@s_grid_spacer: 20px;
+
+@s_map_overflow: 90%;
+@s_map_overflow_indent: (100% - @s_map_overflow) / 2;
+@s_map_overflow_indent: 20px;
+
+
+
+
+
+
+
+
+
+
+/*=======================================================
+=            Classes to used with &:extend()            =
+=======================================================*/
+
+.shadow {
+	.box-shadow(0 0 0 2px @c_shadow);
+}
+
+.row {
+	margin-left: -@s_grid_spacer;
+	&::after {
+		content: ' ';
+		display: block;
+		height: 0;
+		clear: both;
+	}
+}
+
+.col-33 {
+	float: left;
+	.box-sizing(border-box);
+	padding-left: @s_grid_spacer;
+}
+.col-33 {
+	width: 33.3%;
+}
+
+/*=====  End of Classes to used with &:extend()  ======*/
+
+
+
+
+
+
+
+
+
+
+/*========================================
+=            Base tags styles            =
+========================================*/
+
+* {
+	.box-sizing(border-box);
+}
+
+html, body {
+	height: 100%;
+}
+
+body {
+	margin: 0;
+
+	font-family: @f_main;
+	font-size: @s_font;
+	line-height: @s_line_height;
+}
+body {
+	color: @c_text;
+}
+svg text {
+	fill: @c_text;
+}
+
+h4 {
+	font-size: @s_font_h4;
+	font-weight: normal;
+	color: @c_h4;
+}
+
+h3 {
+	font-size: @s_font_h3;
+	font-weight: normal;
+	color: @c_h4;
+}
+
+label {
+	display: block;
+}
+
+input {
+	cursor: pointer;
+}
+
+button, .button {
+	font-family: @f_main;
+	display: inline-block;
+	text-decoration: none;
+	color: #fff;
+	font-weight: @fw_bold;
+	background-color: @c_button_bg;
+	border: none;
+	border-bottom: .2em solid darken(@c_button_bg, 25%);
+	padding: .2em 1em 0;
+	cursor: pointer;
+	font-size: inherit;
+
+	&:hover {
+		background: desaturate(darken(@c_button_bg, 10%), 20%);
+		border-color: darken(@c_button_bg, 30%)
+	}
+	&.active {
+		background: desaturate(darken(@c_button_bg, 25%), 20%);
+		border-color: @c_button_bg;
+	}
+}
+
+hr {
+	margin-top: 20px;
+	margin-bottom: 20px;
+	border: 0;
+	border-top: 1px solid #eee;
+	height: 0;
+	.box-sizing(content-box);
+}
+
+/*=====  End of Base tags styles  ======*/
+
+
+
+
+
+
+
+
+
+
+/* layout begin */
+.header-wrapper, .aside-wrapper, .main-wrapper {
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.header-wrapper {
+	width: 100%;
+	height: @s_header;
+	z-index: 3;
+}
+
+.aside-wrapper {
+	width: @s_aside;
+	padding-top: @s_header;
+	height: 100%;
+	z-index: 2;
+}
+
+.main-wrapper {
+	width: 100%;
+	height: 100%;
+	padding-top: @s_header;
+	padding-left: @s_aside;
+	z-index: 1;
+}
+
+header, aside, main {
+	width: 100%;
+	height: 100%;
+	position: relative;
+}
+/* layout end */
+
+
+header {
+	background: @c_header;
+
+	text-align: right;
+
+	font-size: @s_font_h4;
+}
+
+.header {
+	&-text, &-button, &-separator {
+		display: inline-block;
+		
+		margin: 8px 16px 8px 0;
+	}
+	&-button {
+		line-height: 24px;
+
+		// header - line-height - top/bottom margin - bottom border
+		padding-top: ((@s_header - 24px - 8px * 2) / 2);
+		padding-bottom: ((@s_header - 24px - 8px * 2 - 3px) / 2);
+		margin-top: 6px;
+		border-width: 3px;
+	}
+	&-separator {
+		height: 34px;
+		vertical-align: bottom;
+		border-left: 1px solid @c_text;
+		border-right: 1px solid @c_shadow;
+	}
+}
+
+aside {
+	// prevent from collapsing margins of child elements
+	overflow: auto;
+}
+
+main {
+	
+}
+
+#map {
+	width: 100%;
+	height: 100%;
+}
+
+
+.bottom {
+	position: relative;
+
+	width: auto;
+	max-width: 600px;
+	height: 60px;
+	margin: 0 330px 0 20px;
+	background: #fff;
+
+	&-wrapper {
+		position: absolute;
+		bottom: 20px;
+		left: 0;
+		width: 100%;
+	}
+}
+
+.monthpicker {
+	&-month {
+		width: 80px;
+		text-align: center;
+		padding: 30px 10px 0;
+		color: @c_text_monthpicker;
+		&::before{
+			content: '\2022';
+			position: absolute;
+			top: 5px;
+			margin-left: 10px;
+			width: 22px;
+			font-size: 26px;
+			line-height: 22px;
+		}
+	}
+
+	&-picker {
+		position: absolute;
+		top: 10px;
+		height: 10px;
+		background: @c_monthpicker_picker;
+	}
+	&-begin, &-end {
+		width: 22px;
+		height: 22px;
+		margin-top: -6px;
+		border: 1px solid darken(@c_text_monthpicker, 7%);
+		color: @c_text_monthpicker;
+		.border-radius(@s_button_border_radius);
+		background: #fff;
+		&::before {
+			content: '\2022';
+			display: block;
+			width: 22px;
+			text-align: center;
+			line-height: 22px;
+			font-size: 26px;
+		}
+	}
+	&-begin {
+		float: left;
+		cursor: w-resize;
+		margin-left: -11px;
+	}
+	&-end {
+		float: right;
+		cursor: e-resize;
+		margin-right: -12px;
+	}
+	&-onemonth &-begin {
+		margin-left: -22px;
+	}
+
+	&-onemonth &-end {
+		margin-right: -22px;
+	}
+}
+
+
+.lrscroll {
+	&-left, &-right {
+		width: 50px;
+		height: 60px;
+		cursor: pointer;
+		color: #ccc;
+		background: white;
+	}
+
+	&-left {
+		background-image: data-uri('./img/lrscroll-left.png');
+	}
+	&-right {
+		background-image: data-uri('./img/lrscroll-right.png');
+	}
+	&-right, &-left {
+		background-position: center top;
+		background-repeat: no-repeat;
+		&:hover {
+			background-position: center bottom;
+		}
+	}
+}
+
+#mapLegend {
+	position: absolute;
+	bottom: 20px;
+	right: @s_map_overflow_indent;
+	background: rgba(250, 250, 250, .8)
+}
+
+
+
+
+
+
+
+
+
+
+/*==================================
+=            Data table            =
+==================================*/
+
+.data-table {
+	position: absolute;
+	top: 20px;
+	bottom: 100px;
+	left: @s_map_overflow_indent;
+	right: @s_map_overflow_indent;
+	z-index: 2000;
+
+	&-overflow {
+		height: 100%;
+		overflow: scroll;
+		overflow-y: scroll;
+		overflow-x: auto;
+		background: #fff;
+		position: relative;
+	}
+
+	&-close {
+		width: 30px;
+		height: 30px;
+		background: rgba(64,64,64,.8);
+		position: absolute;
+		right: 0;
+		margin-top: -15px;
+		margin-right: -15px;
+		z-index: 100;
+		.border-radius(50%);
+		text-align: center;
+		line-height: 30px;
+		color: #fff;
+		font-size: 26px;
+		cursor: pointer;
+		&:hover {
+			background: rgba(32,32,32,.9);
+		}
+	}
+
+	table {
+		border-collapse: collapse;
+		white-space: pre-wrap;
+		width: 100%;
+		min-width: 900px;
+	
+		thead {
+			background: #f66;
+			color: #fff;
+			font-weight: @fw_bold;
+			text-align: center;
+			td {
+				vertical-align: middle;
+			}
+		}
+		tbody {
+			tr:nth-child(2n) {
+				background: #f6f6f6;
+			}
+			td {
+				border-right: 1px solid #f6f6f6;
+				padding: 5px;
+				&:last-child {
+					border: none;
+				}
+			}
+		}
+	}
+
+	// spoiler stuff
+	
+	table {
+		margin-bottom: 200px;
+	}
+
+	tbody {
+		td {
+			position: relative;
+			.data-table-spoiled {
+				max-height: 4em * @s_line_height;
+				line-height: @s_line_height;
+				overflow: hidden;
+				&-ready::after {
+					content: '\b7\b7\b7';
+
+					position: absolute;
+					bottom: 10px;
+					right: 10px;
+					
+					background: #fcc;
+					color: #888;
+					
+					font-weight: @fw_bold;
+					font-size: 16px;
+					
+					height: 12px;
+					line-height: 12px;
+					width: 20px;
+					text-align: center;
+				}
+			}
+		}
+		tr {
+			.data-table-spoiler {
+				background: #fff;
+			}
+			&:nth-child(2n) .data-table-spoiler {
+				background: #f6f6f6;
+			}
+		}
+		.data-table-spoiler {
+			position: absolute;
+			z-index: 1;
+			top: 0;
+			left: 0;
+			padding: 5px;
+			overflow: visible;
+			.box-sizing(content-box);
+			outline: 2px solid @c_shadow;
+		}
+	}
+}
+
+
+.data-table-opened {
+	#mapLegend { display: none }
+}
+
+#dataTablePagination {
+	position: absolute;
+	bottom: 0;
+	list-style-type: none;
+	padding: 0;
+	width: 100%;
+	margin: 0 0 10px;
+	text-align: center;
+
+	li {
+		background: #fff;
+
+		display: inline-block;
+		padding: 6px 12px;
+		border: 1px solid darken(@c_button_bg, 25%);
+		cursor: pointer;
+		margin-left: -1px;
+		font-weight: @fw_bold;
+		&:first-child {
+			border-top-left-radius: @s_button_border_radius_big;
+			border-bottom-left-radius: @s_button_border_radius_big;
+		}
+		&:last-child {
+			border-top-right-radius: @s_button_border_radius_big;
+			border-bottom-right-radius: @s_button_border_radius_big;
+		}
+
+		&.active {
+			background: @c_button_bg;
+			color: #fff;
+		}
+	}
+}
+
+/*=====  End of Data table  ======*/
+
+
+
+
+
+
+
+
+
+
+/*=============================================
+=            Sidebar filter styles            =
+=============================================*/
+
+.filter {
+	margin: 20px 10px 60px;
+
+	h3 {
+		padding: 5px 0;
+		margin: 0;
+		margin-bottom: 10px;
+
+		padding-left: 20px;
+		border-bottom: 1px solid @c_border;
+	}
+
+	label {
+		padding: 5px 0;
+	}
+	input[type=checkbox] {
+		margin-right: .4em;
+	}
+}
+
+.filter-partner {
+	.filter-deselect {
+		&:extend(.filter label);
+
+		// deselect button
+		span {
+			display: inline-block;
+			
+			margin-left: .4em;
+
+			cursor: pointer;
+			line-height: 18px;
+			width: 20px;
+			
+			border: 1px solid @c_h4;
+			.border-radius(@s_button_border_radius);
+			text-align: center;
+		}
+	}
+	select {
+		margin: 10px auto;
+		display: block;
+		border: 1px solid darken(@c_border, 8%);
+		background: #fff;
+		padding: 3px;
+		width: 70%;
+	}
+}
+
+.filter-status {
+	#filterStatus {
+		&:extend(.row);
+		&::after {
+			&:extend(.row::after);
+		}
+	}
+	label {
+		&:extend(.col-33);
+	}
+
+
+	#filterStatus {
+		text-align: center;
+	}
+	label {
+		border: none;
+		cursor: pointer;
+		font-size: @s_font;
+		font-weight: normal;
+		color: @c_text;
+	}
+
+	input[type=checkbox] {
+		display: block;
+		margin: 0 auto 5px;
+	
+	}
+	/*
+	input[type=checkbox] {
+		display: none;
+	}
+	input[type=checkbox]+span {
+		display: block;
+		width: 14px;
+		height: 14px;
+		margin: 0 auto;
+		
+		line-height: 5px;
+		text-align: center;
+
+		border-width: 2px;
+		border-style: solid;
+		border-radius: @s_button_border_radius;
+
+		font-size: 0;
+	}
+	input[type=checkbox]:checked+span {
+		font-size: 24px;
+	}
+	*/
+}
+
+.filter-location {
+	label {
+		padding-left: 20px;
+		font-size: @s_font_small;
+		&.filtercheckbox-allcheck {
+			padding-left: 0;
+			font-size: @s_font;
+		}
+	}
+}
+
+/*=====  End of Sidebar filter styles  ======*/
+
+
+
+
+
+
+
+
+
+
+/*===================================
+=            Map markers            =
+===================================*/
+
+.marker {
+	background: none;
+	border: none;
+
+
+	&-icon {
+		position: absolute;
+		z-index: 1;
+		width: 100%;
+	}
+
+
+	&.leaflet-clickable {
+		cursor:-webkit-grab;
+		cursor: -moz-grab;
+		cursor: grab;
+	}
+
+
+	&.js-inactive {
+		opacity: .5;
+	}
+
+	.marker-icon, .marker-rose .js-submarker {
+		cursor: pointer;
+	}
+}
+
+// add :hover and .js-active effects
+.marker-icon circle {
+	fill: none;
+}
+.marker .marker-icon:hover circle,
+.marker.js-active .marker-icon circle {
+	stroke: @c_shadow_noalpha;
+	stroke-width: 4px;
+}
+.marker-rose circle.js-active {
+	stroke: @c_shadow_noalpha;
+	stroke-width: 2px;
+}
+
+
+// map popup
+.leaflet-popup-content-wrapper, .leaflet-popup-tip {
+	&:extend(.shadow);
+}
+
+.leaflet-popup-content {
+	margin: 5px 10px 0;
+
+	.popup-title {
+		border-bottom: 1px solid @c_border;
+		padding-bottom: 8px;
+		font-size: @s_font_h4;
+		font-family: @f_main;
+	}
+	p b {
+		font-family: @f_main;
+		font-weight: @fw_bold;
+	}
+	p {
+		margin: 0 0 8px;
+	}
+}
+
+/*=====  End of Map markers  ======*/
+
+
+
+
+
+
+
+
+
+
+/*===================================
+=            Map overlay            =
+===================================*/
+
+.raions-overlay.js-inactive {
+	fill: #03f;
+	fill-opacity: 0.03;
+}
+
+/*=====  End of Map overlay  ======*/
+
+
+
+/*===================================
+=          Custom Styles            =
+===================================*/
+header .header-button.fleft{
+	float:left;
+	margin-left:10px;
+}
+.dropdown-button{
+	cursor: pointer;
+}
+.dropdown-button:after{
+	content: '▼';
+	font-size: 15px;
+	display: inline-block;
+	margin-left: 6px;
+}
+.dropdown-button.open:after{
+	content: '▲';
+}
+
+.dropdown-list{
+	overflow: hidden;
+	max-height: 0px;
+	transition: max-height 1s ease-in-out;
+}
+.dropdown-button.open + .dropdown-list{
+	max-height: 2500px;
+}
+#filterRaionDonetsk,
+#filterRaionLuhansk{
+	width:50%;
+	float: left;
+}
+.dropdown-self{
+	position: relative;
+}
+.dropdown-self .dropdown-button{
+	color: #000;
+	position: absolute;
+	top: 3px;
+	left: 120px;
+}
+.dropdown-self .dropdown-button ~ label{
+	max-height: 0;
+	overflow: hidden;
+	padding-top: 0;
+	padding-bottom: 0;
+	transition: all 1s ease;
+}
+.dropdown-self .dropdown-button.open ~ label{
+	max-height: 60px;
+	overflow: hidden;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+/*=====  End of Custom Styles  ====*/
