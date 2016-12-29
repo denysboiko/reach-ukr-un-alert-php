@@ -2,12 +2,12 @@
 	$dataFile = './data/alerts.csv?m=' . (filemtime('data/alerts.csv') % 12345678);
 
 
-	$dataFiles = [];
-	$dataFilesDir = scandir('data/alerts/');
+$dataFiles = [];
+$dataFilesDir = scandir('data/alerts/');
 
-	for($i = 2; $i < count($dataFilesDir); ++$i) {
-		$dataFiles[] = 'data/alerts/' . $dataFilesDir[$i] . '?m=' . (filemtime('data/alerts/' . $dataFilesDir[$i]) % 12345678);
-	}
+for($i = 2; $i < count($dataFilesDir); ++$i) {
+    $dataFiles[] = 'data/alerts/' . $dataFilesDir[$i] . '?m=' . (filemtime('data/alerts/' . $dataFilesDir[$i]) % 12345678);
+}
 
 ?>
 <!DOCTYPE html>
@@ -31,19 +31,15 @@
 
 		<link rel="stylesheet" href="css/style.css" />
 
-		<script type="text/javascript" src="js/monthpicker.js"></script>
-		<script type="text/javascript" src="js/lrscroll.js"></script>
-
-
-		
-		<script type="text/javascript" src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+		<script type="text/javascript" src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+        <!--https://code.jquery.com/jquery-3.1.1.min.js-->
 		<script src="js/changeLang.js"></script>
 		<script type="text/javascript">
 
 				
 				var setLang = function(newLang) {
 					window.localStorage['lang'] = newLang;
-				}
+				};
 
 				if(!window.localStorage['lang']) {
 					setLang('en');
@@ -62,11 +58,85 @@
 				font-size: 11pt; 
 			}
 		</style>
+
+        <script src="js/microplugin.min.js"></script>
+        <script src="js/sifter.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.4/js/selectize.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.4/css/selectize.css" />
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.4/css/selectize.default.css" />
+
+        <link rel="stylesheet" href="css/iThing.css" type="text/css" />
+
+        <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+        <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+
+        <script src="bootstrap/js/bootstrap.min.js"></script>
+
+        <link rel="stylesheet" href="css/awesome-bootstrap-checkbox.css" type="text/css" />
+
+        <script src="js/jquery-ui.min.js"></script>
+        <script src="js/jQDateRangeSlider-min.js"></script>
+        <style type="text/css">
+            .button, button {
+                background: #1da7ee;
+                color: #ffffff;
+                border: 1px solid #0073bb;
+                text-shadow: 0 1px 0 rgba(0, 51, 83, 0.3);
+                -webkit-border-radius: 3px;
+                -moz-border-radius: 3px;
+                border-radius: 3px;
+                background-color: #1b9dec;
+                background-image: -moz-linear-gradient(top, #1da7ee, #178ee9);
+                background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#1da7ee), to(#178ee9));
+                background-image: -webkit-linear-gradient(top, #1da7ee, #178ee9);
+                background-image: -o-linear-gradient(top, #1da7ee, #178ee9);
+                background-image: linear-gradient(to bottom, #1da7ee, #178ee9);
+                background-repeat: repeat-x;
+                filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff1da7ee', endColorstr='#ff178ee9', GradientType=0);
+                -webkit-box-shadow: 0 1px 0 rgba(0,0,0,0.2),inset 0 1px rgba(255,255,255,0.03);
+                box-shadow: 0 1px 0 rgba(0,0,0,0.2),inset 0 1px rgba(255,255,255,0.03);
+            }
+
+            button:hover, button:hover {
+                background: #48b0ef;
+                border: 1px solid #0073bb;
+            }
+
+            .header-button {
+
+                border-width: 1px;
+            }
+            .panel-heading .panel-title:after {
+                /* symbol for "opening" panels */
+                font-family: 'Glyphicons Halflings';  /* essential for enabling glyphicon */
+                content: "\e114";    /* adjust as needed, taken from bootstrap.css */
+                float: right;        /* adjust as needed */
+                color: grey;         /* adjust as needed */
+            }
+            .dropdown-button:after {
+                /* symbol for "opening" panels */
+                font-family: 'Glyphicons Halflings';  /* essential for enabling glyphicon */
+                content: "\e114";    /* adjust as needed, taken from bootstrap.css */
+                float: right;        /* adjust as needed */
+                color: grey;         /* adjust as needed */
+                line-height: 26.4px;
+                margin-right: 5px;
+            }
+            .dropdown-button.collapsed:after {
+                /* symbol for "collapsed" panels */
+                content: "\e079";    /* adjust as needed, taken from bootstrap.css */
+            }
+            .panel-heading.collapsed .panel-title:after {
+                /* symbol for "collapsed" panels */
+                content: "\e079";    /* adjust as needed, taken from bootstrap.css */
+            }
+        </style>
+
 	</head>
 	<body>
 		<div class="header-wrapper">
 			<header>
-				<button class="header-button fleft translate resetFilters">RESET FILTERS</button>
+				<button class="header-button fleft translate resetFilters" id = "resetFilters">RESET FILTERS</button>
 				<a href="/UKRAINE/alerts/admin"><button class="header-button fleft translate">ADD AN ALERT</button></a>
 				<div class="header-button fleft">
 					<button class="button-lang-en translate"  onclick="setLang('en');location.reload();">EN</button>
@@ -88,8 +158,23 @@
 				<div id="map"></div>
 
 				<div class="bottom-wrapper">
-					<div class="bottom">
-						<div id="monthpicker"></div>
+
+                    <div class="bottom">
+                        <div id="slider"></div>
+                        <!--<script>
+                            /*
+                            $("#slider").dateRangeSlider({
+                                bounds: {
+                                    min: new Date(2015, 0, 1),
+                                    max: new Date(2016, 6, 19)//2016-07-19
+                                },
+                                valueLabels: "change",
+                                delayOut: 600
+                            });
+                            */
+
+                        </script>-->
+                        <!--<div id="monthpicker" style="display: none"></div>-->
 					</div>
 				</div>
 
@@ -113,13 +198,29 @@
 					<div id="filterCluster"></div>
 				</div>
 
-				<div class="filter filter-partner translate-filter">
-					<h3>Response partner</h3>
-					<label>
-						<input type="checkbox" id="filterPartnersAll" /><span>All response partners</span>
-					</label>
+
+
+
+
+                <div class="filter filter-partner translate-filter">
+
+                    <h3>Response partner</h3>
+                    <div class="checkbox">
+                        <input type="checkbox" id="filterPartnersAll" />
+                        <label for="filterPartnersAll">
+                            All response partners
+<!--                            <span>All response partners</span>-->
+                        </label>
+                    </div>
+
+
 					<div id="filterPartnerSelected"></div>
-					<select id="filterPartner"></select>
+
+                    <select id="filterPartner" class="demo-default selectized" multiple="multiple" style="display: none;" placeholder="- Select partner to filter -" tabindex="-1" >
+                    </select>
+
+                    <!--<select id="filterPartner"></select>-->
+
 				</div>
 
 
@@ -143,15 +244,25 @@
 				</div>
 
 				<div class="filter filter-location translate-filter">
-					<h3 class="dropdown-button" onclick="this.classList.toggle('open');">Location</h3>
-					<div class="dropdown-list">
-						<div id="filterRaionDonetsk" class="dropdown-self">
-							<a href="#" class="dropdown-button" onclick="this.classList.toggle('open');"></a>
-						</div>
-						<div id="filterRaionLuhansk" class="dropdown-self">
-							<a href="#" class="dropdown-button" onclick="this.classList.toggle('open');"></a>
-						</div>
+					<h3 class="dropdown-button"
+                        data-toggle="collapse"
+                        data-target="#collapseOne"
+                        aria-expanded="true"
+                        aria-controls="collapseOne">
+                        Location
+                    </h3><!-- onclick="this.classList.toggle('open');"-->
+
+					<div id="collapseOne" class="collapse in">
+                        <select id="locations-filter" class="selectized" multiple="multiple" style="display: none;" placeholder="- Select location to filter -" tabindex="-1" >
+                        </select>
+                        <div id="filterRaionDonetsk" class="dropdown-self">
+                            <!--<a href="#" class="dropdown-button" onclick="this.classList.toggle('open');"></a>-->
+                        </div>
+                        <div id="filterRaionLuhansk" class="dropdown-self">
+                            <!--<a href="#" class="dropdown-button" onclick="this.classList.toggle('open');"></a>-->
+                        </div>
 					</div>
+
 				</div>
 
 			</aside>
@@ -354,7 +465,7 @@
 					]
 				}
 				, tplFilterCounter: _.template(d3.select('#tplFilterCounter').html())
-			}
+			};
 
 			// colorbrewer['Set1']['3'] except yellow, green and red, because it used in markers
 			conf.raionColors = {
@@ -371,15 +482,23 @@
 				, '4420300000': '#00BFFF', '4420600000': '#0fa9FF', '4420900000': '#00cFeF', '4421400000': '#1E90FF', '4421600000': '#0f60FF', '4422200000': '#87CEfB'
 				, '4422500000': '#00cFeF', '4422800000': '#1E90FF', '4423100000': '#87CEfB', '4423300000': '#00BFFF', '4423600000': '#0f60FF', '4423800000': '#0fa9FF'
 				, '4424000000': '#0fa9FF', '4424200000': '#00BFFF', '4424500000': '#00cFeF', '4424800000': '#0f60FF', '4425100000': '#1E90FF', '4425400000': '#87CEfB'
-			}
+			};
 			// make all raionColors a bit lighter
 			for(var k in conf.raionColors) {
-				var c = d3.hsl(conf.raionColors[k])
-				c.l += .1
+				var c = d3.hsl(conf.raionColors[k]);
+				c.l += .1;
 				conf.raionColors[k] = c.toString()
 			}
 			
 		</script>
+
 		<script type="text/javascript" src="js/script.js"></script>
+
+        <!--<script>
+            /*$(document).ready(function () {
+                //console.log(cf)
+            });*/
+        </script>-->
+
 	</body>
 </html>
