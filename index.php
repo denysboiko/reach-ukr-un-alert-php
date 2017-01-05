@@ -22,7 +22,8 @@ for($i = 2; $i < count($dataFilesDir); ++$i) {
 		<link rel="stylesheet" href="libs/leaflet/leaflet.css" />
 		<script src="libs/leaflet/leaflet.js"></script>
 
-		<script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+        <!--https://d3js.org/d3.v3.min.js-->
+		<script src="js/d3.v3.min.js" charset="utf-8"></script>
 		
 		<script src="libs/crossfilter.min.js"></script>
 
@@ -30,8 +31,8 @@ for($i = 2; $i < count($dataFilesDir); ++$i) {
 
 
 		<link rel="stylesheet" href="css/style.css" />
-
-		<script type="text/javascript" src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+        <!--jquery-2.2.4-->
+		<script type="text/javascript" src="js/jquery.min.js"></script>
         <!--https://code.jquery.com/jquery-3.1.1.min.js-->
 		<script src="js/changeLang.js"></script>
 		<script type="text/javascript">
@@ -59,11 +60,14 @@ for($i = 2; $i < count($dataFilesDir); ++$i) {
 			}
 		</style>
 
-        <script src="js/microplugin.min.js"></script>
-        <script src="js/sifter.min.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.4/js/selectize.js"></script>
-        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.4/css/selectize.css" />
-        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.4/css/selectize.default.css" />
+        <!--<script src="js/microplugin.min.js"></script>
+        <script src="js/sifter.min.js"></script>-->
+        <!--https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.4/js/selectize.js-->
+        <script type="text/javascript" src="js/selectize.min.js"></script>
+        <!--https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.4/css/selectize.css-->
+        <link rel="stylesheet" type="text/css" href="css/selectize/selectize.min.css" />
+        <!--https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.4/css/selectize.default.css-->
+        <link rel="stylesheet" type="text/css" href="css/selectize/selectize.default.min.css" />
 
         <link rel="stylesheet" href="css/iThing.css" type="text/css" />
 
@@ -75,9 +79,9 @@ for($i = 2; $i < count($dataFilesDir); ++$i) {
         <link rel="stylesheet" href="css/awesome-bootstrap-checkbox.css" type="text/css" />
 
         <script src="js/jquery-ui.min.js"></script>
-        <script src="js/jQDateRangeSlider-min.js"></script>
+        <script src="js/jQDateRangeSlider-withRuler-min.js"></script>
         <style type="text/css">
-            .button, button {
+            header .button, header button {
                 background: #1da7ee;
                 color: #ffffff;
                 border: 1px solid #0073bb;
@@ -97,12 +101,12 @@ for($i = 2; $i < count($dataFilesDir); ++$i) {
                 box-shadow: 0 1px 0 rgba(0,0,0,0.2),inset 0 1px rgba(255,255,255,0.03);
             }
 
-            button:hover, button:hover {
+            header button:hover, header button:hover {
                 background: #48b0ef;
                 border: 1px solid #0073bb;
             }
 
-            .header-button {
+            header .header-button {
 
                 border-width: 1px;
             }
@@ -204,13 +208,12 @@ for($i = 2; $i < count($dataFilesDir); ++$i) {
 
                 <div class="filter filter-partner translate-filter">
 
-                    <h3>Response partner</h3>
-                    <div class="checkbox">
-                        <input type="checkbox" id="filterPartnersAll" />
-                        <label for="filterPartnersAll">
-                            All response partners
-<!--                            <span>All response partners</span>-->
-                        </label>
+                    <h3>Response partner
+                        <button id="clearPartners" class="btn btn-sm" style="display: none">Clear</button>
+                    </h3>
+                    <div class="checkbox" style="display: none">
+                        <input type="checkbox" id="filterPartnersAll" checked = "checked"/>
+                        <label for="filterPartnersAll">All response partners</label>
                     </div>
 
 

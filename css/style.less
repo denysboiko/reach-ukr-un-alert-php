@@ -135,7 +135,7 @@ input {
 	cursor: pointer;
 }
 
-button, .button {
+header button, header .button {
 	font-family: @f_main;
 	display: inline-block;
 	text-decoration: none;
@@ -144,7 +144,7 @@ button, .button {
 	background-color: @c_button_bg;
 	border: none;
 	border-bottom: .2em solid darken(@c_button_bg, 25%);
-	padding: .2em 1em 0;
+	padding: 5px 1em 3.5px;
 	cursor: pointer;
 	font-size: inherit;
 
@@ -232,8 +232,8 @@ header {
 		line-height: 24px;
 
 		// header - line-height - top/bottom margin - bottom border
-		padding-top: ((@s_header - 24px - 8px * 2) / 2);
-		padding-bottom: ((@s_header - 24px - 8px * 2 - 3px) / 2);
+		// padding-top: ((@s_header - 24px - 8px * 2) / 2);
+		// padding-bottom: ((@s_header - 24px - 8px * 2 - 3px) / 2);
 		margin-top: 6px;
 		border-width: 3px;
 	}

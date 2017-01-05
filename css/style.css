@@ -67,8 +67,8 @@ label {
 input {
   cursor: pointer;
 }
-button,
-.button {
+header button,
+header .button {
   font-family: Roboto, verdana, sans-serif;
   display: inline-block;
   text-decoration: none;
@@ -77,17 +77,17 @@ button,
   background-color: #ff5555;
   border: none;
   border-bottom: 0.2em solid #d40000;
-  padding: .2em 1em 0;
+  padding: 5px 1em 3.5px;
   cursor: pointer;
   font-size: inherit;
 }
-button:hover,
-.button:hover {
+header button:hover,
+header .button:hover {
   background: #e93838;
   border-color: #bb0000;
 }
-button.active,
-.button.active {
+header button.active,
+header .button.active {
   background: #bf1515;
   border-color: #ff5555;
 }
@@ -149,8 +149,6 @@ header {
 }
 .header-button {
   line-height: 24px;
-  padding-top: 5px;
-  padding-bottom: 3.5px;
   margin-top: 6px;
   border-width: 3px;
 }
