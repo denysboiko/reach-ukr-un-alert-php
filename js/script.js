@@ -783,24 +783,14 @@
 		var initMonthpicker = function() {
 
 			// Retrieving Min and Max date values from date dimension
+            var m = 6;
 			var   dateBegin = cf.dateDim.bottom(1)[0].date
-				, dateEnd = cf.dateDim.top(1)[0].date;
-
-
-			//var $monthpicker = d3.select('#monthpicker')
-
-			// monthpicker = new Monthpicker($monthpicker.node(), dateBegin, dateEnd, {
-			// 	change: function(dateBegin, dateEnd) {
-			// 		cf.dateDim.filterRange([dateBegin, dateEnd])
-            //
-			// 		filterDispatcher.filtered()
-			// 	}
-			// });
-
-			//lrscroll($monthpicker.node(), {anchors: '.monthpicker-month'});
+				, dateEnd = cf.dateDim.top(1)[0].date
+                , dateInitial = new Date(dateEnd.getFullYear(),1,1);
+                dateInitial.setMonth(dateEnd.getMonth()-6);
 
             slider = $("#slider");
-            var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
+
             slider.dateRangeSlider({
                 bounds: {
                     min: dateBegin,
@@ -809,6 +799,10 @@
 				values: {
                     min: dateBegin,
                     max: dateEnd
+				},
+                defaultValues: {
+                	min: dateInitial,
+					max: dateEnd
 				},
                 valueLabels: "change",
                 delayOut: 600,
@@ -840,6 +834,8 @@
 				}]
             });
 
+            cf.dateDim.filterRange([dateInitial, dateEnd]);
+            filterDispatcher.filtered();
 
             slider.bind("valuesChanged", function(e, data){
 
@@ -861,7 +857,6 @@
                 cf.dateDim.filterRange([dateBeginNew, dateEndNew]);
 				filterDispatcher.filtered();
             });
-
 
 		};
 
@@ -903,7 +898,8 @@
 		var   $partner = d3.select('#filterPartner') // select with list of partners as option values
 			, $partnerSelected = d3.select('#filterPartnerSelected') // Div with list of selected partners and remove button
 			, $allPartners = d3.select('#filterPartnersAll') // Checkbox that's intended to select "All partners"
-			, $clearPartners = d3.select('#clearPartners');
+			, $clearPartners = d3.select('#clearPartners')
+            , $clearLocation = d3.select('#clearLocation');
 
 		// Fulfills select with values
 
@@ -1103,6 +1099,9 @@
         $clearPartners.on('click', function() {
             resetPartners();
         });
+        $clearLocation.on('click', function() {
+            resetLocation();
+        });
 
 		/*=====  End of Partner filer          ======*/
 
@@ -1245,7 +1244,7 @@
 			self.filters = $labels.data().map(function(d) { return d.key });
 			self.totalFiltersNum = self.filters.length;
 
-			// fill each checkbox
+                // fill each checkbox
 			$checks = $labels.append('input')
 				.attr({
 					'type': 'checkbox',
@@ -1344,31 +1343,31 @@
 		// init Location filter
 		var filterRaionDonetsk, filterRaionLuhansk, filtersRes;
 
-		filterRaionDonetsk = new filterCheckboxWidget('#filterRaionDonetsk', cf.raionCodeDim, {
-			checkAll: 'Donetska oblast'
-			, dataAccessor: function(dimension) {
-				return conf.filterOblastRaions.donetsk
-			}
-			, textAccessor: function(d) { return d.value }
-			, filtering: function(dimension, filters) {
-				filtersRes = d3.merge([filterRaionDonetsk.filters, filterRaionLuhansk.filters]);
-				if(filtersRes.length == 0) {
-					dimension.filter([])
-				} else if (filtersRes.length == conf.filterOblastRaions.donetsk.length + conf.filterOblastRaions.luhansk.length) {
-					dimension.filterAll()
-				} else {
-					dimension.filterFunction(function(d) { return filtersRes.indexOf(d) != -1 })
-				}
-			}
-			, onChange: function() {
-				filterDispatcher.filtered();
-				raionFilterDispatcher.filtered(filtersRes);
-			}
-		});
+        /*filterRaionDonetsk = new filterCheckboxWidget('#filterRaionDonetsk', cf.raionCodeDim, {
+            checkAll: 'Donetska oblast'
+            , dataAccessor: function(dimension) {
+                return conf.filterOblastRaions.donetsk
+            }
+            , textAccessor: function(d) { return d.value }
+            , filtering: function(dimension, filters) {
+                filtersRes = d3.merge([filterRaionDonetsk.filters, filterRaionLuhansk.filters]);
+                if(filtersRes.length == 0) {
+                    dimension.filter([])
+                } else if (filtersRes.length == conf.filterOblastRaions.donetsk.length + conf.filterOblastRaions.luhansk.length) {
+                    dimension.filterAll()
+                } else {
+                    dimension.filterFunction(function(d) { return filtersRes.indexOf(d) != -1 })
+                }
+            }
+            , onChange: function() {
+                filterDispatcher.filtered();
+                raionFilterDispatcher.filtered(filtersRes);
+            }
+        });*/
 
 
 
-		filterRaionLuhansk = new filterCheckboxWidget('#filterRaionLuhansk', cf.raionCodeDim, {
+		/*filterRaionLuhansk = new filterCheckboxWidget('#filterRaionLuhansk', cf.raionCodeDim, {
 			checkAll: 'Luhanska oblast'
 			, dataAccessor: function(dimension) {
 				return conf.filterOblastRaions.luhansk
@@ -1389,7 +1388,7 @@
 				raionFilterDispatcher.filtered(filtersRes)
 			}
 		});
-
+*/
 		var OblastRaions = function() {
 			result = [];
 			var OblastRaions = conf.filterOblastRaions;
@@ -1432,12 +1431,24 @@
             }
         });
 
+
+        var resetLocation = function () {
+            loc[0].selectize.clear();
+            cf.raionCodeDim.filterAll();
+            $clearLocation.style({ 'display' : 'none'});
+        };
+
         loc.on('change', function () {
             var   filters = [];
 
+            //console.log(filterRaionDonetsk.filters);
+            //filtersRes = d3.merge([filterRaionDonetsk.filters, filterRaionLuhansk.filters]);
 
-            filtersRes = d3.merge([filterRaionDonetsk.filters, filterRaionLuhansk.filters]);
-
+            var source = cf.raionCodeDim.group().all();
+            filtersRes = source.map(function(d) { return d.key });
+            // console.log(raions)
+            //
+            // console.log(filtersRes);
 
             $("#locations-filter option").each(function() {
                 var value = $(this).val();
@@ -1455,18 +1466,20 @@
             if (filters.length == 0) {
                 cf.raionCodeDim.filterAll();
                 raionFilterDispatcher.filtered(filtersRes);
+                $clearLocation.style({ 'display' : 'none'});
             } else {
                 cf.raionCodeDim.filterFunction(function(d) { return filters.indexOf(d) != -1 });
                 raionFilterDispatcher.filtered(filters);
+                $clearLocation.style({ 'display' : null});
             }
 
             filterDispatcher.filtered();
 
-			console.log(filters);
+			/*console.log(filters);
             console.log(filtersRes);
             console.log(cf.raionCodeDim.group().all(function (d) {
 				return d.key
-            }));
+            }));*/
 
         });
 
